@@ -70,12 +70,54 @@ function Food(map) {
     map.canvas.appendChild(this.flag);
 }
 
+function Snake(map) {
+    // set the width and the height for Snake 
+    this.width = map.atom;
+    this.height = map.atom;
+    //default direction 
+    this.direction = 'right';
+
+    this.body = [
+        {x: 2, y: 0},   // head part 
+        {x: 1, y: 0},   // middle part 
+        {x: 0, y: 0}    // tail part 
+    ];
+    
+    // a method to display the snake
+    this.display = function() {
+        for (let i = 0; i < this.body.length; i++) {
+            if (this.body[i].x != null) // when snake eats the food, x === null, 
+            var s = document.createElement('div');
+            this.body[i].flag = s;
+            
+            // define the style of the snake 
+            s.style.width = this.width + 'px';
+            s.style.height = this.height + 'px';
+
+            s.style.backgroundColor = "rgb(" + Math.floor(Math.random() * 240) + ", " + Math.floor(Math.random() * 240) + ", " + Math.floor(Math.random() * 240) + ")";
+
+            // set the position 
+            s.style.position = 'absolute';
+            s.style.left = this.body[i].x * this.width + 'px';
+            s.style.top = this.body[i].y * this.height + 'px';
+
+            // append the element to the map 
+            map.canvas.appendChild(s);
+        }
+    }
+}
+
 // create the instance of Map
 var map = new Map(20, 40, 20);
 map.create(); // show the map
 
 // create the instance of Fodd 
 var food = new Food(map);
+
+// create a snake
+var snake = new Snake(map);
+// display the snake
+snake.display();
 
 var timer; 
 
