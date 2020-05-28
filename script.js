@@ -1,4 +1,5 @@
 const main = document.getElementById('main');
+var showCanvas = true;
 
 /**
  * 
@@ -7,7 +8,7 @@ const main = document.getElementById('main');
  * @param {number} ynum  define y-axis based on how many atoms 
  * @constructor
  */
-
+// map object 
 function Map(atom, xnum, ynum) {
     this.atom = atom;
     this.xnum = xnum;
@@ -18,15 +19,67 @@ function Map(atom, xnum, ynum) {
     //the method to create the canvas 
     this.create = function() {
         this.canvas = document.createElement('div');
+        this.canvas.style.cssText = "position: relative; top: 40px; border:1px solid darkred; background: #fafafa";
+        this.canvas.style.width = this.atom * this.xnum + 'px';
+        this.canvas.style.height = this.atom * this.ynum + 'px';
         main.appendChild(this.canvas);
+
+        if (showCanvas) {
+            for (let y = 0; y < ynum; y++) {
+                for (let x = 0; x < xnum; x++) {
+                    var a = document.createElement('div');
+                    a.style.cssText = "border: 1px solid yellow";
+                    a.style.width = this.atom + 'px';
+                    a.style.height = this.atom + 'px';
+                    a.style.backgroundColor = "skyblue";
+                    this.canvas.appendChild(a);
+                    a.style.position = "absolute";
+                    a.style.left = x * this.atom + 'px';
+                    a.style.top = y * this.atom + 'px';
+                }
+            }
+        }
     }
 }
 
+/**
+ * 
+ * @param {Map} map 
+ * @constructor
+ */
+
+function Food(map) {
+    this.width = map.atom;
+    this.height = map.atom;
+    this.bgColor = "rgb(" + Math.floor(Math.random() * 250) + ", " + Math.floor(Math.random() * 250) + ", " + Math.floor(Math.random() * 250) + ")"; //generate random colors for the food 
+    
+    // generate random numbers to set x-axis and y-asix for food 
+    this.x = Math.floor(Math.random() * map.xnum);
+    this.y = Math.floor(Math.random() * map.ynum); 
+
+    this.flag = document.createElement('div');
+    this.flag.style.width = this.width + 'px';
+    this.flag.style.height = this.height + 'px';
+
+    this.flag.style.backgroundColor = this.bgColor;
+    this.flag.style.borderRadius = '50%';
+    this.flag.style.position = 'absolute';
+    this.flag.style.left = this.x * this.width + 'px';
+    this.flag.style.top = this.y * this.height + 'px';
+
+    map.canvas.appendChild(this.flag);
+}
+
+// create the instance of Map
 var map = new Map(20, 40, 20);
+map.create(); // show the map
+
+// create the instance of Fodd 
+var food = new Food(map);
 
 var timer; 
 
-document.querySelector('btn-start').onclick = function() {
+document.querySelector('.btn-start').onclick = function() {
     clearInterval(timer);
     timer = setInterval(function(){
 
@@ -34,6 +87,6 @@ document.querySelector('btn-start').onclick = function() {
 
 }
 
-document.querySelector('stop').onclick = function() {
+document.querySelector('.btn-stop').onclick = function() {
     clearInterval(timer);
 }
