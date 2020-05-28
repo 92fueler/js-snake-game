@@ -1,0 +1,13 @@
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
+#main {
+    margin: 100px;
+}
+
+.btn {
+    width: 100px;
+    height: 40px;
+}
