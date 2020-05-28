@@ -105,6 +105,30 @@ function Snake(map) {
             map.canvas.appendChild(s);
         }
     }
+
+    // a method to make the snake to move 
+    this.move = function() {
+        for (let i = this.body.length - 1; i > 0; i--) {
+            this.body[i].x = this.body[i - 1].x;
+            this.body[i].y = this.body[i - 1].y;
+        }
+
+        // direction: right, left, up, down
+        switch (this.direction) {
+            case 'left': this.body[0].x -= 1; break
+            case 'right': this.body[0].x += 1; break
+            case 'up': this.body[0].y -= 1; break
+            case 'down': this.body[0].y += 1; break
+        }
+
+        for (let i = 0; i < this.body.length; i++) {
+            if (this.body[i].flag != null) { // when snake eats the food, flag equals to null, and cannot be deleted
+                map.canvas.removeChild(this.body[i].flag);
+            }
+        }
+
+        this.display();
+    }
 }
 
 // create the instance of Map
@@ -119,12 +143,40 @@ var snake = new Snake(map);
 // display the snake
 snake.display();
 
+// keyboard event 
+window.onkeydown = function(e) {
+    var event = e || window.event;
+
+    switch (event.keyCode) {
+        case 38: 
+            if (snake.direction != 'down') {
+                snake.direction = 'up';
+            }
+            break;
+        case 40:
+            if (snake.direction != 'up') {
+                snake.direction = 'down';
+            }
+            break;
+        case 37:
+            if (snake.direction != 'right') {
+                snake.direction = 'left';
+            }
+            break;
+        case 39: 
+            if (snake.direction != 'down') {
+                snake.direction = 'right';
+            }
+            break;
+    }
+}
+
 var timer; 
 
 document.querySelector('.btn-start').onclick = function() {
     clearInterval(timer);
     timer = setInterval(function(){
-
+        snake.move();
     }, 300);
 
 }
